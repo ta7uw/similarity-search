@@ -42,9 +42,9 @@ class MultiscaleNetModel(chainer.Chain):
 
 
         # Shallow layers
-        self._layers["conv2_1"] = L.Convolution2D(None, 96, 3, stride=4, pad=1, wscale=0.02*np.sqrt(3*3*3))
+        self._layers["conv2_1"] = L.Convolution2D(None, 96, 3, stride=4, pad=1, initialW=0.02*np.sqrt(3*3*3))
         self._layers["norm2_1"] = L.BatchNormalization(96)
-        self._layers["conv3_1"] = L.Convolution2D(None, 96, 3, stride=4, pad=1, wscale=0.02*np.sqrt(3*3*3))
+        self._layers["conv3_1"] = L.Convolution2D(None, 96, 3, stride=4, pad=1, initialW=0.02*np.sqrt(3*3*3))
         self._layers["norm3_1"] = L.BatchNormalization(96)
 
         # Final layers
