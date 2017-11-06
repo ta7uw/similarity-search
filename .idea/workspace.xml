@@ -2,9 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ef9d6681-f04b-4f73-b80a-44416ff89f7d" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/emacs.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/Similarity-search.iml" afterPath="$PROJECT_DIR$/.idea/Similarity-search.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/multiscaleNetmodel.py" afterPath="$PROJECT_DIR$/multiscaleNetmodel.py" />
     </list>
@@ -20,8 +17,8 @@
       <file leaf-file-name="multiscaleNetmodel.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/multiscaleNetmodel.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="16" column="10" lean-forward="false" selection-start-line="16" selection-start-column="10" selection-end-line="16" selection-end-column="10" />
+            <state relative-caret-position="265">
+              <caret line="69" column="8" lean-forward="true" selection-start-line="69" selection-start-column="8" selection-end-line="69" selection-end-column="8" />
               <folding>
                 <element signature="e#0#14#0" expanded="true" />
               </folding>
@@ -76,8 +73,8 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-232" />
-    <option name="y" value="48" />
+    <option name="x" value="-369" />
+    <option name="y" value="69" />
     <option name="width" value="940" />
     <option name="height" value="731" />
   </component>
@@ -164,7 +161,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-232" y="48" width="940" height="731" extended-state="0" />
+    <frame x="-369" y="69" width="940" height="731" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.30289534" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -217,8 +214,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/multiscaleNetmodel.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" column="10" lean-forward="false" selection-start-line="16" selection-start-column="10" selection-end-line="16" selection-end-column="10" />
+        <state relative-caret-position="265">
+          <caret line="69" column="8" lean-forward="true" selection-start-line="69" selection-start-column="8" selection-end-line="69" selection-end-column="8" />
           <folding>
             <element signature="e#0#14#0" expanded="true" />
           </folding>
