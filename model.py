@@ -22,6 +22,7 @@ class MultiscaleNetModel(chainer.Chain):
         self._layers["norm1"] = L.BatchNormalization(64)
         self._layers["conv2_reduce"] = L.Convolution2D(None, 64, 1, initialW=self.initialW)
         self._layers["conv2"] = L.Convolution2D(None, 192, 3, stride=1, pad=1, initialW=self.initialW)
+        self._layers["norm2"] = L.BatchNormalization(192)
         self._layers["inc3a"] = L.Inception(None, 64, 96, 128, 16, 32, 32)
         self._layers["inc3b"] = L.Inception(None, 128, 128, 192, 32, 96, 64)
         self._layers["inc4a"] = L.Inception(None, 192, 96, 208, 16, 48, 64)
@@ -32,13 +33,17 @@ class MultiscaleNetModel(chainer.Chain):
         self._layers["inc5b"] = L.Inception(None, 384, 192, 384, 48, 128, 128)
         self._layers["loss3_fc"] = L.Linear(None, self.n_class, initialW=self.initialW)
 
-        self._layers["loss1_conv"] = L.Convolution2D(512, 128, 1, initialW=self.initialW)
-        self._layers["loss1_fc1"] = L.Linear(2048, 1024, initialW=self.initialW)
-        self._layers["loss1_fc2"] = L.Linear(1024, 1000, initialW=self.initialW)
+        self._layers["loss1_conv"] = L.Convolution2D(None, 128, 1, initialW=self.initialW)
+        self._layers["norma"] = L.BatchNormalization(128)
+        self._layers["loss1_fc1"] = L.Linear(None, 1024, initialW=self.initialW)
+        self._layers["norma2"] = L.BatchNormalization(1024)
+        self._layers["loss1_fc2"] = L.Linear(None, self.n_class, initialW=self.initialW)
 
-        self._layers["loss2_conv"] = L.Convolution2D(528, 128, 1, initialW=self.initialW)
-        self._layers["loss2_fc1"] = L.Linear(2048, 1024, initialW=self.initialW)
-        self._layers["loss2_fc2"] = L.Linear(1024, 1000, initialW=self.initialW)
+        self._layers["loss2_conv"] = L.Convolution2D(None, 128, 1, initialW=self.initialW)
+        self._layers["normb"] = L.BatchNormalization(128)
+        self._layers["loss2_fc1"] = L.Linear(None, 1024, initialW=self.initialW)
+        self._layers["normb2"] = L.BatchNormalization(1024)
+        self._layers["loss2_fc2"] = L.Linear(None, 1000, initialW=self.initialW)
 
         # Shallow layers
         self._layers["conv2_1"] = L.Convolution2D(None, 96, 3, stride=4, pad=1, initialW=0.02*np.sqrt(3*3*3))
@@ -55,7 +60,8 @@ class MultiscaleNetModel(chainer.Chain):
     def __call__(self, x):
 
         # Deep layers
-        h1 = x
+        h1 = F.max_pooling_2d(F.relu(self._layers["norm1"](self._layers["conv1"](x))), 3, stride=2, pad=1)
+
         h1 = F.normalize(h1)
 
         # Shallow layers
