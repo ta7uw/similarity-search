@@ -2,7 +2,7 @@ import chainer
 import chainer.links as L
 import chainer.functions as F
 import numpy as np
-from chainer.initializers import constant, uniform, normal
+from chainer.initializers import constant, uniform
 
 
 class MultiscaleNetModel(chainer.Chain):
