@@ -30,10 +30,9 @@ class MultiscaleNet(chainer.Chain):
         super(MultiscaleNet, self).__init__()
         with self.init_scope():
             # Deep layers: GoogleNet of BatchNormalization version
-            self.conv1 = L.Convolution2D(None, 64, 7, stride=2, pad=3, initialW=self.initialW)
+            self.conv1 = L.Convolution2D(None, 64, 7, stride=2, pad=3)
             self.norm1 = L.BatchNormalization(64)
-            self.conv2_reduce = L.Convolution2D(None, 64, 1)
-            self.conv2 = L.Convolution2D(None, 192, 3, stride=1, pad=1, initialW=self.initialW)
+            self.conv2 = L.Convolution2D(None, 192, 3, stride=1, pad=1)
             self.norm2 = L.BatchNormalization(192)
             self.inc3a = L.InceptionBN(None, 64, 64, 64, 64, 96, "avg", 32)
             self.inc3b = L.InceptionBN(None, 64, 64, 96, 64, 96, "avg", 64)
@@ -56,8 +55,8 @@ class MultiscaleNet(chainer.Chain):
             self.loss2_conv = L.Convolution2D(None, 128, 1, initialW=self.initialW)
             self.normb = L.BatchNormalization(128)
             self.loss2_fc1 = L.Linear(None, 1024, initialW=self.initialW)
-            self.normb2  = L.BatchNormalization(1024)
-            self.loss2_fc2  = L.Linear(None, 1000, initialW=self.initialW)
+            self.normb2 = L.BatchNormalization(1024)
+            self.loss2_fc2 = L.Linear(None, 1000, initialW=self.initialW)
 
             # Shallow layers
             self.conv_s1 = L.Convolution2D(None, 96, 3, stride=4, pad=1, initialW=0.02*np.sqrt(3*3*3))
@@ -69,21 +68,9 @@ class MultiscaleNet(chainer.Chain):
             self.fc4_1 = L.Linear(None, 4096)
             self.fc4_2 = L.Linear(None, self.n_class)
 
-    def __call__(self, anchor, p, n, a_t, p_t, n_t):
-        self.anchor = self.forward_one(anchor, a_t)
-        self.positive = self.forward_one(p, p_t)
-        self.negative = self.forward_one(n, n_t)
-        self.loss = F.triplet(anchor=self.anchor,
-                              positive=self.positive,
-                              negative=self.negative,
-                              margin=0.2,
-                              reduce="mean")
-        return self.loss
-
-    def forward_one(self, x, t):
+    def __call__(self, x, t):
         # Deep layers
         h1 = F.max_pooling_2d(F.relu(self.norm1(self.conv1(x))), 3, stride=2, pad=1)
-        h1 = F.relu(self.conv2_reduce(h1))
         h1 = F.max_pooling_2d(F.relu(self.norm2(self.conv2(h1))), 3, stride=2, pad=1)
 
         h1 = self.inc3a(h1)
