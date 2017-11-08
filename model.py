@@ -5,7 +5,7 @@ import numpy as np
 from chainer.initializers import constant, uniform
 
 
-class MultiscaleNetModel(chainer.Chain):
+class MultiscaleNet(chainer.Chain):
 
     def __init__(self, n_class, pretrained_model=None, mean=None, initialW=None, initialBias=None):
         self.n_class = n_class
@@ -27,7 +27,7 @@ class MultiscaleNetModel(chainer.Chain):
             # we employ a zero initializer for faster computation
             self.initialW = constant.Zero()
 
-        super(MultiscaleNetModel, self).__init__()
+        super(MultiscaleNet, self).__init__()
         with self.init_scope():
             # Deep layers: GoogleNet of BatchNormalization version
             self.conv1 = L.Convolution2D(None, 64, 7, stride=2, pad=3, initialW=self.initialW)
@@ -70,13 +70,13 @@ class MultiscaleNetModel(chainer.Chain):
             self.fc4_2 = L.Linear(None, self.n_class)
 
     def __call__(self, anchor, p, n):
-        self.anchor = self.forward(anchor)
-        self.positive = self.forward(p)
-        self.negative = self.forward(n)
+        self.anchor = self.forward_one(anchor)
+        self.positive = self.forward_one(p)
+        self.negative = self.forward_one(n)
         self.loss = F.triplet(self.anchor, self.positive, self.negative)
         return self.loss
 
-    def forward(self, x):
+    def forward_one(self, x):
         # Deep layers
         h1 = F.max_pooling_2d(F.relu(self.norm1(self.conv1(x))), 3, stride=2, pad=1)
         h1 = F.relu(self.conv2_reduce(h1))

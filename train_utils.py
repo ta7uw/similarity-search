@@ -5,13 +5,13 @@ from chainer import training
 from chainer.training import extensions, triggers
 
 
-from model import MultiscaleNetModel
+from model import MultiscaleNet
 
 
 def train(train_data, val_data, iteration, lr, step_size, batchsize,
           gpu, out, val_iteration, log_iteration, loaderjob, resume):
 
-    model = MultiscaleNetModel()
+    model = MultiscaleNet()
 
     if gpu >= 0:
         chainer.cuda.get_device_from_id(gpu).use()
