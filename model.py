@@ -69,10 +69,10 @@ class MultiscaleNet(chainer.Chain):
             self.fc4_1 = L.Linear(None, 4096)
             self.fc4_2 = L.Linear(None, self.n_class)
 
-    def __call__(self, anchor, p, n):
-        self.anchor = self.forward_one(anchor)
-        self.positive = self.forward_one(p)
-        self.negative = self.forward_one(n)
+    def __call__(self, anchor, p, n, a_t, p_t, n_t):
+        self.anchor = self.forward_one(anchor, a_t)
+        self.positive = self.forward_one(p, p_t)
+        self.negative = self.forward_one(n, n_t)
         self.loss = F.triplet(anchor=self.anchor,
                               positive=self.positive,
                               negative=self.negative,
@@ -132,7 +132,6 @@ class MultiscaleNet(chainer.Chain):
         h = self.fc4_2(h)
 
         loss = F.softmax_cross_entropy(h, t)
-
         accuracy = F.accuracy(h, t)
 
         chainer.report({
