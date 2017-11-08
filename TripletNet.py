@@ -1,7 +1,5 @@
 import chainer
 import chainer.functions as F
-from model import MultiscaleNet
-
 
 class TripletNet(chainer.Chain):
 
