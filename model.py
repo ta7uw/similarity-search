@@ -69,8 +69,14 @@ class MultiscaleNetModel(chainer.Chain):
             self.fc4_1 = L.Linear(None, 4096)
             self.fc4_2 = L.Linear(None, self.n_class)
 
-    def __call__(self, x):
+    def __call__(self, anchor, p, n):
+        self.anchor = self.forward(anchor)
+        self.positive = self.forward(p)
+        self.negative = self.forward(n)
+        self.loss = F.triplet(self.anchor, self.positive, self.negative)
+        return self.loss
 
+    def forward(self, x):
         # Deep layers
         h1 = F.max_pooling_2d(F.relu(self.norm1(self.conv1(x))), 3, stride=2, pad=1)
         h1 = F.relu(self.conv2_reduce(h1))
