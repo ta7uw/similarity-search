@@ -1,6 +1,7 @@
 import chainer
 import chainer.functions as F
 
+
 class TripletNet(chainer.Chain):
 
     def __init__(self, model):

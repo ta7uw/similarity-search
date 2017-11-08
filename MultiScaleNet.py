@@ -96,13 +96,14 @@ class MultiscaleNet(chainer.Chain):
 
         h1 = self.inc4e(h1)
         h1 = self.inc5a(h1)
-        h1 = F.average_pooling_2d(self.inc4e(h1), 7)
+        h1 = F.average_pooling_2d(self.inc5b(h1), 7)
         h1 = self.loss3_fc(h1)
         loss3 = F.softmax_cross_entropy(h1, t)
 
         deep_loss = 0.03 * (loss1 + loss2) + loss3
+        print(deep_loss)
 
-        h1 = F.normalize(deep_loss)
+        h1 = F.normalize(h1)
 
         # Shallow layers
         h2 = F.average_pooling_2d(x, 4, stride=4, pad=2)
@@ -118,15 +119,7 @@ class MultiscaleNet(chainer.Chain):
         h = F.normalize(F.relu(self.fc4_1(h)))
         h = self.fc4_2(h)
 
-        loss = F.softmax_cross_entropy(h, t)
-        accuracy = F.accuracy(h, t)
-
-        chainer.report({
-            "deep_loss": deep_loss,
-            "loss": loss,
-            "accuracy": accuracy,
-        }, self)
-        return loss
+        return h
 
 
 

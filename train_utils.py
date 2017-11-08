@@ -5,7 +5,22 @@ from chainer import training
 from chainer.training import extensions, triggers
 
 
-from model import MultiscaleNet
+from MultiScaleNet import MultiscaleNet
+
+
+class PreprocessedDataset(chainer.dataset.DatasetMixin):
+
+    def __init__(self):
+
+
+
+
+
+
+
+
+
+
 
 
 def train(train_data, val_data, iteration, lr, step_size, batchsize,
