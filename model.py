@@ -73,7 +73,11 @@ class MultiscaleNet(chainer.Chain):
         self.anchor = self.forward_one(anchor)
         self.positive = self.forward_one(p)
         self.negative = self.forward_one(n)
-        self.loss = F.triplet(self.anchor, self.positive, self.negative)
+        self.loss = F.triplet(anchor=self.anchor,
+                              positive=self.positive,
+                              negative=self.negative,
+                              margin=0.2,
+                              reduce="mean")
         return self.loss
 
     def forward_one(self, x):
