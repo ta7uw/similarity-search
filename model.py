@@ -80,7 +80,7 @@ class MultiscaleNet(chainer.Chain):
                               reduce="mean")
         return self.loss
 
-    def forward_one(self, x):
+    def forward_one(self, x, t):
         # Deep layers
         h1 = F.max_pooling_2d(F.relu(self.norm1(self.conv1(x))), 3, stride=2, pad=1)
         h1 = F.relu(self.conv2_reduce(h1))
@@ -95,7 +95,7 @@ class MultiscaleNet(chainer.Chain):
         a = F.relu(self.norma(self.loss1_conv(a)))
         a = F.relu(self.norma2(self.loss1_fc1(a)))
         a = self.loss1_fc2(a)
-        loss1 = F.softmax_cross_entropy(a)
+        loss1 = F.softmax_cross_entropy(a, t)
 
         h1 = self.inc4b(h1)
         h1 = self.inc4c(h1)
@@ -105,13 +105,13 @@ class MultiscaleNet(chainer.Chain):
         b = F.relu(self.normb(self.loss2_conv(b)))
         b = F.relu(self.normb2(self.loss2_fc1(b)))
         b = self.loss2_fc2(b)
-        loss2 = F.softmax_cross_entropy(b)
+        loss2 = F.softmax_cross_entropy(b, t)
 
         h1 = self.inc4e(h1)
         h1 = self.inc5a(h1)
         h1 = F.average_pooling_2d(self.inc4e(h1), 7)
         h1 = self.loss3_fc(h1)
-        loss3 = F.softmax_cross_entropy(h1)
+        loss3 = F.softmax_cross_entropy(h1, t)
 
         deep_loss = 0.03 * (loss1 + loss2) + loss3
 
@@ -131,13 +131,13 @@ class MultiscaleNet(chainer.Chain):
         h = F.normalize(F.relu(self.fc4_1(h)))
         h = self.fc4_2(h)
 
-        accuracy = F.accuracy(h)
+        loss = F.softmax_cross_entropy(h, t)
 
-        loss = F.softmax_cross_entropy(h)
+        accuracy = F.accuracy(h, t)
 
         chainer.report({
             "deep_loss": deep_loss,
-            "loss" : loss,
+            "loss": loss,
             "accuracy": accuracy,
         }, self)
         return loss
