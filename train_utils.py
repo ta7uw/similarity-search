@@ -10,7 +10,22 @@ from MultiScaleNet import MultiscaleNet
 
 class PreprocessedDataset(chainer.dataset.DatasetMixin):
 
-    def __init__(self):
+    def __init__(self, path, root, mean, crop_size, random=True):
+        self.base = chainer.datasets.LabeledImageDataset(path, root)
+        self.mean = mean.astype("f")
+        self.crop_size = crop_size
+        self.random = random
+
+    def __len__(self):
+        return self.base
+
+    def get_example(self, i):
+        crop_size = self.crop_size
+
+        image, label = self.base[i]
+        _, h, w = image.shape
+
+
 
 
 
