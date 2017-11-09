@@ -1,4 +1,5 @@
 import numpy as np
+import random
 
 import chainer
 from chainer import training
@@ -25,18 +26,23 @@ class PreprocessedDataset(chainer.dataset.DatasetMixin):
         image, label = self.base[i]
         _, h, w = image.shape
 
+        if self.random:
+            top = random.randint(0, h - crop_size - 1)
+            left = random.randint(0, w - crop_size - 1)
+            if random.randint(0, 1):
+                image = image[:, :, ::-1]
 
+        else:
+            top = (h - crop_size) // 2
+            left = (w - crop_size) // 2
 
+        bottom = top + crop_size
+        right = left + crop_size
 
-
-
-
-
-
-
-
-
-
+        image = image[:, top:bottom, left:right]
+        image -= self.mean[:, top:bottom, left:right]
+        image *= ( 1.0 // 2555.0) # Scale to [0, 1]
+        return image, label
 
 def train(train_data, val_data, iteration, lr, step_size, batchsize,
           gpu, out, val_iteration, log_iteration, loaderjob, resume):
