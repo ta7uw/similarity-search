@@ -78,30 +78,14 @@ class MultiscaleNet(chainer.Chain):
         h1 = self.inc3c(h1)
         h1 = self.inc4a(h1)
 
-        a = F.average_pooling_2d(h1, 5, stride=3)
-        a = F.relu(self.norma(self.loss1_conv(a)))
-        a = F.relu(self.norma2(self.loss1_fc1(a)))
-        a = self.loss1_fc2(a)
-        loss1 = F.softmax_cross_entropy(a, t)
-
         h1 = self.inc4b(h1)
         h1 = self.inc4c(h1)
         h1 = self.inc4d(h1)
-
-        b = F.average_pooling_2d(h1, 5, stride=3)
-        b = F.relu(self.normb(self.loss2_conv(b)))
-        b = F.relu(self.normb2(self.loss2_fc1(b)))
-        b = self.loss2_fc2(b)
-        loss2 = F.softmax_cross_entropy(b, t)
 
         h1 = self.inc4e(h1)
         h1 = self.inc5a(h1)
         h1 = F.average_pooling_2d(self.inc5b(h1), 7)
         h1 = self.loss3_fc(h1)
-        loss3 = F.softmax_cross_entropy(h1, t)
-
-        deep_loss = 0.03 * (loss1 + loss2) + loss3
-        print(deep_loss)
 
         h1 = F.normalize(h1)
 
