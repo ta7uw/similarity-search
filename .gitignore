@@ -19,3 +19,6 @@
 # Gradle:
 .idea/**/gradle.xml
 .idea/**/libraries
+
+# Test
+./test
