@@ -5,7 +5,7 @@ import numpy as np
 from chainer.initializers import constant, uniform
 
 
-class GoogleNet(chainer.Chain):
+class GoogleNetBN(chainer.Chain):
     """
     GoogleNet of BatchNormalization version
     """
@@ -30,7 +30,7 @@ class GoogleNet(chainer.Chain):
             # we employ a zero initializer for faster computation
             self.initialW = constant.Zero()
 
-        super(GoogleNet, self).__init__()
+        super(GoogleNetBN, self).__init__()
         with self.init_scope():
             # Deep layers: GoogleNet of BatchNormalization version
             self.conv1 = L.Convolution2D(None, 64, 7, stride=2, pad=3, nobias=True)

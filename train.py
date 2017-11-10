@@ -16,7 +16,7 @@ def main():
     parser.add_argument("--iteration", type=int, default=120000,
                         help="the number of iterations to run until finishing the train loop")
 
-    parser.add_argument("--lr", type-float, default=1e-4,
+    parser.add_argument("--lr", type=float, default=1e-4,
                         help="Initial learning rate")
 
     parser.add_argument("--step_size", type=int, default=-1,
@@ -37,7 +37,7 @@ def main():
     parser.add_argument("--loaderjob", type=int, default=4,
                         help="The number of processes to launch for MultiprocessIterator")
 
-    parser.add_argument("--log_iteration", type=int, default=10,
+    parser.add_argument("--log_iteration", type=int, default=100,
                         help="The number of iterations between every logging")
 
     parser.add_argument("--resume",
