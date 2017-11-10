@@ -3,6 +3,7 @@ import chainer
 from itertools import chain
 import os
 
+
 def dataset_label():
     # Image directory name
     IMG_DIR = "dataset"
