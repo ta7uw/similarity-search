@@ -5,7 +5,6 @@ import chainer
 from chainer import training
 from chainer.training import extensions, triggers
 
-
 from MultiScaleNet import MultiscaleNet
 
 
@@ -41,27 +40,40 @@ class PreprocessedDataset(chainer.dataset.DatasetMixin):
 
         image = image[:, top:bottom, left:right]
         image -= self.mean[:, top:bottom, left:right]
-        image *= ( 1.0 // 2555.0) # Scale to [0, 1]
+        image *= ( 1.0 // 2555.0)  # Scale to [0, 1]
         return image, label
 
+
 def train(train_data, val_data, iteration, lr, step_size, batchsize,
-          gpu, out, val_iteration, log_iteration, loaderjob, resume):
+          gpu, out, val_iteration, log_iteration, loaderjob, resume, pre_trainedmodel = True):
 
     model = MultiscaleNet()
+
+    if pre_trainedmodel:
+        print("Load model")
+        chainer.serializers.load_npz("", model)
 
     if gpu >= 0:
         chainer.cuda.get_device_from_id(gpu).use()
         model.to_gpu()
 
+    train = PreprocessedDataset(train_data, )
+    val = PreprocessedDataset(val_data)
+    mean = np.load("")
+
     if loaderjob <= 0:
-        train_iter = chainer.iterators.SerialIterator(train_data,
-                                                      batchsize)
+        train_iter = chainer.iterators.SerialIterator(train_data, batchsize)
+        val_iter = chainer.iterators.SerialIterator(val_data, batchsize, shuffle=False, repeat=False)
+
     else:
         train_iter = chainer.iterators.MultiprocessIterator(train_data,
                                                             batchsize,
-                                                            n_processes=min(loaderjob, batchsize))
-
-    val_iter = chainer.iterators.SerialIterator(val_data, batchsize, shuffle=False, repeat=False)
+                                                            n_processes=loaderjob)
+        val_iter = chainer.iterators.MultiprocessIterator(val_data,
+                                                          batchsize,
+                                                          n_processes=loaderjob,
+                                                          shuffle=False,
+                                                          repeat=False)
 
     optimizer = chainer.optimizers.Adam()
     optimizer.setup(model)
@@ -74,6 +86,9 @@ def train(train_data, val_data, iteration, lr, step_size, batchsize,
 
     val_interval = (val_iteration, "iteration")
     log_interval = (log_iteration, "iteration")
+
+    trainer.extend(extensions.Evaluator(val_iter, model, device=gpu), trigger=val_interval)
+
     trainer.extend(extensions.LogReport(trigger=log_interval))
     trainer.extend(extensions.observe_lr(), trigger=log_interval)
     trainer.extend(extensions.PrintReport(
@@ -84,6 +99,7 @@ def train(train_data, val_data, iteration, lr, step_size, batchsize,
     trainer.extend(extensions.snapshot(), trigger=val_interval)
     trainer.extend(extensions.snapshot_object(model, "model_iter_{.updater.iteration}"),
                    trigger=val_interval)
+    trainer.extend(extensions.ProgressBar(update_interval=10))
 
     if resume:
         chainer.serializers.load_npz(resume, trainer)
