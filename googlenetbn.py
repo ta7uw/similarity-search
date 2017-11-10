@@ -104,3 +104,23 @@ class GoogleNetBN(chainer.Chain):
         }, self)
 
         return loss
+
+    def predict(self, x):
+        h = F.max_pooling_2d(F.relu(self.norm1(self.conv1(x))), 3, stride=2, pad=1)
+        h = F.max_pooling_2d(F.relu(self.norm2(self.conv2(h))), 3, stride=2, pad=1)
+
+        h = self.inc3a(h)
+        h = self.inc3b(h)
+        h = self.inc3c(h)
+        h = self.inc4a(h)
+
+        h = self.inc4b(h)
+        h = self.inc4c(h)
+        h = self.inc4d(h)
+
+        h = self.inc4e(h)
+        h = self.inc5a(h)
+        h = F.average_pooling_2d(self.inc5b(h), 7)
+        h = self.loss3_fc(h)
+
+        return F.softmax(h)
