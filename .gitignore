@@ -22,3 +22,6 @@
 
 # Test
 ./test
+
+# Caffe Model
+googlenet.caffemodel
