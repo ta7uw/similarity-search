@@ -6,6 +6,9 @@ from chainer.initializers import constant, uniform
 
 
 class GoogleNet(chainer.Chain):
+    """
+    GoogleNet of BatchNormalization version
+    """
 
     def __init__(self, n_class, pretrained_model=None, mean=None, initialW=None, initialBias=None):
         self.n_class = n_class
