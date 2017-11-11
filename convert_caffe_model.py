@@ -1,18 +1,14 @@
 import pickle
 import chainer
 from chainer.links.caffe import CaffeFunction
-from chainer import  serializers
-import os, sys
-print(os.getcwd())
-sys.path.append(os.getcwd())
-
+from chainer import serializers
 from googlenetbn import GoogleNetBN
 
 
 def convert_caffe2chainer():
     print('start loading model file...')
     caffe_model = CaffeFunction('googlenet.caffemodel')
-    print('done.')
+    print('Done.')
 
     # copy parameters from caffemodel into chainer model
     print('start copy params.')
@@ -124,7 +120,7 @@ def convert_caffe2chainer():
     googlenet.loss2_fc2.b.data = caffe_model['loss2/classifier'].b.data
 
     serializers.save_npz('tuned_googlenetbn.npz', googlenet)
-    print('done')
+    print('Done')
 
 if __name__ == '__main__':
     convert_caffe2chainer()
