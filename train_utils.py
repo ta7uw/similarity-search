@@ -5,7 +5,8 @@ import chainer
 from chainer import training
 from chainer.training import extensions, triggers
 
-from multi_scale_net import MultiscaleNet
+from googlenetbn import GoogleNetBN
+from func.dataset_function import dataset_label
 
 
 class PreprocessedDataset(chainer.dataset.DatasetMixin):
@@ -44,22 +45,19 @@ class PreprocessedDataset(chainer.dataset.DatasetMixin):
         return image, label
 
 
-def train(train_data, val_data, iteration, lr, step_size, batchsize,
+def train(train_data, val_data, iteration, epoch,  lr, step_size, batchsize,
           gpu, out, val_iteration, log_iteration, loaderjob, resume, pre_trainedmodel = True):
 
-    model = MultiscaleNet()
+    b_names, labels = dataset_label()
+    model =GoogleNetBN(n_class=len(b_names))
 
     if pre_trainedmodel:
         print("Load model")
-        chainer.serializers.load_npz("", model)
+        chainer.serializers.load_npz("tuned_googlenetbn.npz", model)
 
     if gpu >= 0:
         chainer.cuda.get_device_from_id(gpu).use()
         model.to_gpu()
-
-    train = PreprocessedDataset(train_data, )
-    val = PreprocessedDataset(val_data)
-    mean = np.load("")
 
     if loaderjob <= 0:
         train_iter = chainer.iterators.SerialIterator(train_data, batchsize)
@@ -75,11 +73,11 @@ def train(train_data, val_data, iteration, lr, step_size, batchsize,
                                                           shuffle=False,
                                                           repeat=False)
 
-    optimizer = chainer.optimizers.Adam()
+    optimizer = chainer.optimizers.Adam(alpha=0.001)
     optimizer.setup(model)
 
     updater = training.StandardUpdater(train_iter, optimizer, device=gpu)
-    trainer = training.Trainer(updater, (iteration, "iteration"), out)
+    trainer = training.Trainer(updater, (epoch, "epoch"), out)
 
     trainer.extend(extensions.ExponentialShift("lr", 0.1, init=lr),
                    trigger=triggers.ManualScheduleTrigger(step_size, "iteration"))

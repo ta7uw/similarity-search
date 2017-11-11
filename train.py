@@ -71,7 +71,7 @@ def main():
     print("Training strats")
     train(
         train_data=train_dataset, val_data=val_dataset,
-        iteration=args.iteration, lr=args.lr,
+        iteration=args.iteration, epoch=args.epoch, lr=args.lr,
         step_size=args.stepsoze, batchsize=args.batchsize,
         gpu=args.gpu, out=args.out, val_iteration=args.val_iteration,
         log_iteration=args.log_iteration, loaderjob=args.loaderjob,
