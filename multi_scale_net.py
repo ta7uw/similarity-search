@@ -12,7 +12,7 @@ class MultiscaleNet(chainer.Chain):
         self.mean = mean
         self.initialbias = initialBias
 
-        insize = 224
+        self.insize = 224
 
         if mean is None:
             # imagenet means

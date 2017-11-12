@@ -1,20 +1,12 @@
 import argparse
 import numpy as np
-
-import chainer
-from train_utils import train, PreprocessedDataset
-from googlenetbn import GoogleNetBN
-
+from train_utils import run_train
 
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--train",
                         help="Path to the root directory of the training dataset")
-
-    parser.add_argument("--val",
-                        help="Path to the root directory of the validation dataset. If this is not supplied,"
-                             "the data for train dataset is split into two wtih ratio 8:2. ")
 
     parser.add_argument("--iteration", type=int, default=120000,
                         help="the number of iterations to run until finishing the train loop")
@@ -25,7 +17,7 @@ def main():
     parser.add_argument("--step_size", type=int, default=-1,
                         help="The number of iterations to run before dropping the learning rate by 0.1")
 
-    parser.add_argument("--batch_size", type=int, default=32,
+    parser.add_argument("--batch_size", type=int, default=64,
                         help="The size of batch")
 
     parser.add_argument("--epoch", type=int, default=20,
@@ -56,21 +48,9 @@ def main():
     args = parser.parse_args()
     mean = np.load(args.mean)
 
-    model = GoogleNetBN()
-
-    if args.val is not None:
-        train_dataset = PreprocessedDataset(args.train, args.root, mean, model.insize)
-        val_dataset = PreprocessedDataset(args.val, args.root, mean, model.insize, False)
-    else:
-        # If --val is not supplied, the train data is split in two with ratio 8:2
-        dataset = args.train
-        train_data, val_data = chainer.datasets.split_dataset_random(dataset, int(len(dataset)*0.8))
-        train_dataset = PreprocessedDataset(train_data, args.root, mean, model.insize)
-        val_dataset = PreprocessedDataset(val_data, args.root, mean, model.insize, False)
-
     print("Training strats")
-    train(
-        train_data=train_dataset, val_data=val_dataset,
+    run_train(
+        train_data=args.train, mean=mean,
         iteration=args.iteration, epoch=args.epoch, lr=args.lr,
         step_size=args.stepsoze, batchsize=args.batchsize,
         gpu=args.gpu, out=args.out, val_iteration=args.val_iteration,

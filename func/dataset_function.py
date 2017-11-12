@@ -3,9 +3,9 @@ from itertools import chain
 import os
 
 
-def dataset_label():
-    # Image directory name
-    IMG_DIR = "dataset"
+def dataset_label(path):
+    # Image directory path
+    IMG_DIR = path
 
     # Each directory name of item
     b_names = glob.glob("{}/*".format(IMG_DIR))
