@@ -18,6 +18,6 @@ def dataset_label():
     labels = [os.path.basename(os.path.dirname(fn)) for fn in fnames]
     b_names = [os.path.basename(b) for b in b_names]
     labels = [b_names.index(l) for l in labels]
-    return b_names, labels
+    return b_names, labels, fnames
 
 
