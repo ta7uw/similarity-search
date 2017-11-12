@@ -8,15 +8,6 @@ def main():
     parser.add_argument("--train",
                         help="Path to the root directory of the training dataset")
 
-    parser.add_argument("--iteration", type=int, default=120000,
-                        help="the number of iterations to run until finishing the train loop")
-
-    parser.add_argument("--lr", type=float, default=1e-4,
-                        help="Initial learning rate")
-
-    parser.add_argument("--step_size", type=int, default=-1,
-                        help="The number of iterations to run before dropping the learning rate by 0.1")
-
     parser.add_argument("--batch_size", type=int, default=64,
                         help="The size of batch")
 
@@ -26,7 +17,7 @@ def main():
     parser.add_argument("--mean", default="mean.npy",
                         help="Mean file (computed by compute_mean.py)")
 
-    parser.add_argument("--gpu", type=int, default=-1,
+    parser.add_argument("--gpu", type=int, default=0,
                         help="GPU ID")
 
     parser.add_argument("--out", default="result",
@@ -51,13 +42,11 @@ def main():
     print("Training strats")
     run_train(
         train_data=args.train, mean=mean,
-        iteration=args.iteration, epoch=args.epoch, lr=args.lr,
-        step_size=args.stepsoze, batchsize=args.batchsize,
+        epoch=args.epoch,  batchsize=args.batchsize,
         gpu=args.gpu, out=args.out, val_iteration=args.val_iteration,
         log_iteration=args.log_iteration, loaderjob=args.loaderjob,
         resume=args.resume, pre_trainedmodel=True
     )
-
 
 if __name__ == '__main__':
     main()

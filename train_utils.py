@@ -47,7 +47,7 @@ class PreprocessedDataset(chainer.dataset.DatasetMixin):
         return image, label
 
 
-def run_train(train_data, iteration, epoch,  lr, step_size, batchsize,
+def run_train(train_data, epoch, batchsize,
               mean, gpu, out, val_iteration, log_iteration, loaderjob,
               resume, pre_trainedmodel=True):
 
