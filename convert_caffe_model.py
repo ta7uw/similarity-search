@@ -1,5 +1,3 @@
-import pickle
-import chainer
 from chainer.links.caffe import CaffeFunction
 from chainer import serializers
 from googlenetbn import GoogleNetBN
@@ -16,7 +14,6 @@ def convert_caffe2chainer():
 
     googlenet.conv1.W.data = caffe_model['conv1/7x7_s2'].W.data
     googlenet.conv2.W.data = caffe_model['conv2/3x3'].W.data
-
 
     """Inception module of the new GoogLeNet with BatchNormalization."""
     # inc3a

@@ -73,7 +73,7 @@ def train(train_data, val_data, iteration, epoch,  lr, step_size, batchsize,
                                                           shuffle=False,
                                                           repeat=False)
 
-    optimizer = chainer.optimizers.Adam(alpha=0.001)
+    optimizer = chainer.optimizers.Adam()
     optimizer.setup(model)
 
     updater = training.StandardUpdater(train_iter, optimizer, device=gpu)

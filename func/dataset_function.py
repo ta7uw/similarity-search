@@ -1,5 +1,4 @@
 import glob
-import chainer
 from itertools import chain
 import os
 

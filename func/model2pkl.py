@@ -15,12 +15,11 @@ def model2pkl():
     b_names, label_name = dataset_label()
 
     # Define model for classification
-    chainer.config.train = False
     pretrained_model = "model-20epoch.npz"
     model = GoogleNetBN(n_class=len(b_names))
     chainer.serializers.load_npz(pretrained_model, model)
 
-    with open("model.pkl", "wb") as o:
+    with open("googlenetbn_tuned_model.pkl", "wb") as o:
         pickle.dump(model, o)
 
 if __name__ == '__main__':
