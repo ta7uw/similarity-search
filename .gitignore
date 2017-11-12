@@ -21,7 +21,9 @@
 .idea/**/libraries
 
 # Test
-./test
+./test/
 
 # Caffe Model
 googlenet.caffemodel
+
+
