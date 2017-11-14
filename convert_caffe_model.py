@@ -103,20 +103,7 @@ def convert_caffe2chainer():
     googlenet.inc5b.proj33.W.data = caffe_model['inception_5b/double3x3_reduce'].W.data
     googlenet.inc5b.poolp.W.data = caffe_model['inception_5b/pool_proj'].W.data
 
-    googlenet.loss3_fc.W.data = caffe_model['loss3/classifier'].W.data
-    googlenet.loss3_fc.b.data = caffe_model['loss3/classifier'].b.data
-
-    googlenet.loss1_fc1.W.data = caffe_model['loss1/fc'].W.data
-    googlenet.loss1_conv.W.data = caffe_model['loss1/conv'].W.data
-    googlenet.loss1_fc2.W.data = caffe_model['loss1/classifier'].W.data
-    googlenet.loss1_fc2.b.data = caffe_model['loss1/classifier'].b.data
-
-    googlenet.loss2_fc1.W.data = caffe_model['loss2/fc'].W.data
-    googlenet.loss2_conv.W.data = caffe_model['loss2/conv'].W.data
-    googlenet.loss2_fc2.W.data = caffe_model['loss2/classifier'].W.data
-    googlenet.loss2_fc2.b.data = caffe_model['loss2/classifier'].b.data
-
-    serializers.save_npz('tuned_googlenetbn.npz', googlenet)
+    serializers.save_npz('tuned-googlenetbn.npz', googlenet)
     print('Done')
 
 if __name__ == '__main__':
