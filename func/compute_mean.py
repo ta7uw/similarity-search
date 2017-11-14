@@ -21,7 +21,7 @@ def compute_mean(dataset_path, insize):
 
         mean = np.zeros((3, insize, insize))
         for img, _ in tqdm_notebook(t, desc="Calc man"):
-            img = resize(img[:3].astype(np.uint8))
+            img = resize(img[:3].astype(np.uint8), insize)
             mean += img
 
         mean = mean / float(len(dataset))

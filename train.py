@@ -37,7 +37,7 @@ def main():
     print("Training strats")
     train_run(
         train_data=args.train,
-        epoch=args.epoch,  batchsize=args.batchsize,
+        epoch=args.epoch,  batchsize=args.batch_size,
         gpu=args.gpu, out=args.out, val_iteration=args.val_iteration,
         log_iteration=args.log_iteration, loaderjob=args.loaderjob,
         resume=args.resume, pre_trainedmodel=True
