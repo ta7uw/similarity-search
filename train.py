@@ -1,6 +1,5 @@
 import argparse
-import numpy as np
-from train_utils import run_train
+from train_utils import train_run
 
 
 def main():
@@ -8,14 +7,11 @@ def main():
     parser.add_argument("--train",
                         help="Path to the root directory of the training dataset")
 
-    parser.add_argument("--batch_size", type=int, default=64,
+    parser.add_argument("--batch_size", type=int, default=32,
                         help="The size of batch")
 
     parser.add_argument("--epoch", type=int, default=20,
                         help="Number of epochs to train")
-
-    parser.add_argument("--mean", default="mean.npy",
-                        help="Mean file (computed by compute_mean.py)")
 
     parser.add_argument("--gpu", type=int, default=0,
                         help="GPU ID")
@@ -37,11 +33,10 @@ def main():
                              "If unseprcified, no shapshot will be resumed")
 
     args = parser.parse_args()
-    mean = np.load(args.mean)
 
     print("Training strats")
-    run_train(
-        train_data=args.train, mean=mean,
+    train_run(
+        train_data=args.train,
         epoch=args.epoch,  batchsize=args.batchsize,
         gpu=args.gpu, out=args.out, val_iteration=args.val_iteration,
         log_iteration=args.log_iteration, loaderjob=args.loaderjob,

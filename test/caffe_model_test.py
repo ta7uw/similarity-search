@@ -1,4 +1,3 @@
-import pickle
 from chainer.links.caffe import CaffeFunction
 
 

@@ -1,31 +1,32 @@
-import numpy as np
 import random
 
 import chainer
 from chainer import training
-from chainer.training import extensions, triggers
+from chainer.training import extensions
 
 from googlenetbn import GoogleNetBN
 from func.dataset_function import dataset_label
-from func.dataset_function import dataset_label
+from func.compute_mean import compute_mean
+from func.resize import resize
 
 
 class PreprocessedDataset(chainer.dataset.DatasetMixin):
 
-    def __init__(self, path, mean, crop_size, random=True):
-        _, labels, fnames = dataset_label(path)
+    def __init__(self, dataset_path, mean, crop_size, random=True):
+        _, labels, fnames = dataset_label(dataset_path)
         self.base = chainer.datasets.LabeledImageDataset(list(zip(fnames, labels)))
-        self.mean = mean.astype("f")
+        self.mean = mean
         self.crop_size = crop_size
         self.random = random
 
     def __len__(self):
-        return self.base
+        return len(self.base)
 
     def get_example(self, i):
         crop_size = self.crop_size
-
         image, label = self.base[i]
+        image = image.transpose(1, 2, 0)
+        image = resize(image, crop_size)
         _, h, w = image.shape
 
         if self.random:
@@ -43,16 +44,18 @@ class PreprocessedDataset(chainer.dataset.DatasetMixin):
 
         image = image[:, top:bottom, left:right]
         image -= self.mean[:, top:bottom, left:right]
-        image *= (1.0 // 2555.0)  # Scale to [0, 1]
+        image *= (1.0 / 2555.0)  # Scale to [0, 1]
         return image, label
 
 
-def run_train(train_data, epoch, batchsize,
-              mean, gpu, out, val_iteration, log_iteration, loaderjob,
+def train_run(train_data, epoch, batchsize,
+               gpu, out, val_iteration, log_iteration, loaderjob,
               resume, pre_trainedmodel=True):
 
     b_names, labels, _ = dataset_label(train_data)
     model = GoogleNetBN(n_class=len(b_names))
+
+    mean = compute_mean(dataset_path=train_data, insize=model.insize)
 
     dataset = PreprocessedDataset(train_data, mean,  model.insize)
     train, val = chainer.datasets.split_dataset_random(dataset, int(len(dataset) * 0.8))
