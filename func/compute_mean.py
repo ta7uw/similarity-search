@@ -1,35 +1,25 @@
-import argparse
-import sys
-
+from tqdm import tqdm_notebook
 import numpy as np
 import chainer
+import os
+from .resize import resize
+from .dataset_function import dataset_label
 
 
-def compute_mean(dataset):
+def compute_mean(dataset_path, insize):
+    _, labels, fnames = dataset_label(dataset_path)
+    dataset = chainer.datasets.LabeledImageDataset(list(zip(fnames, labels)))
+    if not os.path.exists("image_mean.npy"):
+        t, _ = chainer.datasets.split_dataset_random(dataset, int(len(dataset) * 0.8))
 
-    print("compute mean image")
-    sum_image = 0
-    N = len(dataset)
-    for i, (image, _) in enumerate(dataset):
-        sum_image += image
-        sys.stderr.write("{} / {}\r".format(i, N))
-        sys.stderr.flush()
-    sys.stderr.write("\n")
-    return sum_image / N
+        mean = np.zeros((3, insize, insize))
+        for img, _ in tqdm_notebook(t, desc="Calc man"):
+            img = resize(img[:3].astype(np.uint8))
+            mean += img
 
+        mean = mean / float(len(dataset))
+        np.save("image_mean", mean)
+    else:
+        mean = np.load("image_mean.npy")
 
-def main():
-    parser = argparse.ArgumentParser(description="Compute images man array")
-    parser.add_argument("dataset", help="Path to training image-label list file")
-    parser.add_argument("--root", "-R", default=".", help="Root directory path of image files")
-    parser.add_argument("--output", "-o", default="mean.npy", help="Path to output mean array")
-
-    args = parser.parse_args()
-
-    dataset = chainer.datasets.LabeledImageDataset(args.dataset, args.root)
-    mean = compute_mean(dataset)
-    np.save(args.output, mean)
-
-
-if __name__ == '__main__':
-    main()
+    return mean
