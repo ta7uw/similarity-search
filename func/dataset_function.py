@@ -4,10 +4,16 @@ import os
 
 
 def dataset_label(path):
-    # Image directory path
+    """
+    :param path: Path to the image dataset
+    :return: b_names: Directory name of each item
+             labels: A unique ID is given each directory name
+             fnames: List of path to image files
+    """
+    # Path to the image dataset
     IMG_DIR = path
 
-    # Each directory name of item
+    # Directory name of each item
     b_names = glob.glob("{}/*".format(IMG_DIR))
 
     # List of path to image files

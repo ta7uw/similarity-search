@@ -6,6 +6,7 @@ import chainer
 
 
 def compute_mean(dataset):
+
     print("compute mean image")
     sum_image = 0
     N = len(dataset)
