@@ -7,9 +7,16 @@ from .dataset_function import dataset_label
 
 
 def compute_mean(dataset_path, insize):
+    """
+    Calculate mean image from dataset for training
+    :param dataset_path: path to dataset for training
+    :param insize: insize of model
+    :return: value of mean iamge as array
+    """
     _, labels, fnames = dataset_label(dataset_path)
     dataset = chainer.datasets.LabeledImageDataset(list(zip(fnames, labels)))
     if not os.path.exists("image_mean.npy"):
+        # Calculate the mean with dataset that is not transformed version
         t, _ = chainer.datasets.split_dataset_random(dataset, int(len(dataset) * 0.8))
 
         mean = np.zeros((3, insize, insize))
