@@ -26,4 +26,7 @@
 # Tuned Model
 tuned_googlenetbn.npz
 
+# Result
+./result/
+
 

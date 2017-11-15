@@ -28,7 +28,7 @@ class GoogleNetBN(chainer.Chain):
             # employ default initializers used in BVLC. For more detail, see
             self.initialW = uniform.LeCunUniform(scale=1.0)
 
-        if pretrained_model:
+        if pretrained_model is None:
             # As a sampling process is time-consuming
             # we employ a zero initializer for faster computation
             self.initialW = constant.Zero()

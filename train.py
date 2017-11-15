@@ -19,7 +19,7 @@ def main():
     parser.add_argument("--out", default="result",
                         help="The directory in which logs are saved")
 
-    parser.add_argument("--val_iteration", type=int, default=10000,
+    parser.add_argument("--val_iteration", type=int, default=1000,
                         help="The number of iterations between every validation")
 
     parser.add_argument("--loaderjob", type=int, default=4,

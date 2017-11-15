@@ -2,6 +2,7 @@ from googlenetbn import GoogleNetBN
 from .dataset_function import dataset_label
 import chainer
 import pickle
+import argparse
 
 
 def model2pkl():
@@ -9,10 +10,13 @@ def model2pkl():
     Convert trained mdoel saved in .npz to .pkl
     Chainer Model save as pickle file
     """
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--dataset", default="dataset")
+    args = parser.parse_args()
 
     # Get the label data used for training.
     # It use for getting number of class when classifing
-    b_names, label_name = dataset_label()
+    b_names, _, label_name = dataset_label(args.dataset)
 
     # Define model for classification
     pretrained_model = "model-20epoch.npz"
