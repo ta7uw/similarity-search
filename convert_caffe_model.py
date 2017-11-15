@@ -69,22 +69,22 @@ def convert_caffe2chainer():
     googlenet.inc4b.poolp.W.data = caffe_model['inception_4b/pool_proj'].W.data
 
     # inc4c
-    googlenet.inc4c.conv1.W.data = caffe_model['inception_4c/1x1'].W.data
+    # googlenet.inc4c.conv1.W.data = caffe_model['inception_4c/1x1'].W.data
     googlenet.inc4c.conv3.W.data = caffe_model['inception_4c/3x3'].W.data
     googlenet.inc4c.conv33a.W.data = caffe_model['inception_4c/double3x3a'].W.data
     googlenet.inc4c.conv33b.W.data = caffe_model['inception_4c/double3x3b'].W.data
     googlenet.inc4c.proj3.W.data = caffe_model['inception_4c/3x3_reduce'].W.data
     googlenet.inc4c.proj33.W.data = caffe_model['inception_4c/double3x3_reduce'].W.data
-    googlenet.inc4c.poolp.W.data = caffe_model['inception_4c/pool_proj'].W.data
+    # googlenet.inc4c.poolp.W.data = caffe_model['inception_4c/pool_proj'].W.data
 
     # inc4d
-    googlenet.inc4d.conv1.W.data = caffe_model['inception_4d/1x1'].W.data
+    # googlenet.inc4d.conv1.W.data = caffe_model['inception_4d/1x1'].W.data
     googlenet.inc4d.conv3.W.data = caffe_model['inception_4d/3x3'].W.data
     googlenet.inc4d.conv33a.W.data = caffe_model['inception_4d/double3x3a'].W.data
     googlenet.inc4d.conv33b.W.data = caffe_model['inception_4d/double3x3b'].W.data
     googlenet.inc4d.proj3.W.data = caffe_model['inception_4d/3x3_reduce'].W.data
     googlenet.inc4d.proj33.W.data = caffe_model['inception_4d/double3x3_reduce'].W.data
-    googlenet.inc4d.poolp.W.data = caffe_model['inception_4d/pool_proj'].W.data
+    # googlenet.inc4d.poolp.W.data = caffe_model['inception_4d/pool_proj'].W.data
 
     # inc4e
     googlenet.inc4e.conv3.W.data = caffe_model['inception_4e/3x3'].W.data
@@ -111,10 +111,10 @@ def convert_caffe2chainer():
     googlenet.inc5b.proj33.W.data = caffe_model['inception_5b/double3x3_reduce'].W.data
     googlenet.inc5b.poolp.W.data = caffe_model['inception_5b/pool_proj'].W.data
 
-    googlenet.loss1_conv.W.data = caffe_model["loss1/conv"].W.data
-    googlenet.loss1_fc1.W.data = caffe_model["loss1/fc"].W.data
-    googlenet.loss2_conv.W.data = caffe_model["loss2/conv"].W.data
-    googlenet.loss2_fc1.W.data = caffe_model["loss2/fc"].W.data
+    # googlenet.loss1_conv.W.data = caffe_model["loss1/conv"].W.data
+    # googlenet.loss1_fc1.W.data = caffe_model["loss1/fc"].W.data
+    # googlenet.loss2_conv.W.data = caffe_model["loss2/conv"].W.data
+    # googlenet.loss2_fc1.W.data = caffe_model["loss2/fc"].W.data
 
     serializers.save_npz('tuned_googlenetbn.npz', googlenet)
     print('Done')
