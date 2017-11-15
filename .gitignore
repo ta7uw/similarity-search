@@ -23,7 +23,7 @@
 # Test
 ./test/
 
-# Caffe Model
-googlenet.caffemodel
+# Tuned Model
+tuned_googlenetbn.npz
 
 
