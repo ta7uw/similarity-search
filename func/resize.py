@@ -8,4 +8,4 @@ def resize(image, insize):
     image = Image.fromarray(image)
     image = image.resize((insize, insize), Image.BICUBIC)
 
-    return np.asanyarray(image).transpose(2, 0, 1)
+    return np.asarray(image).transpose(2, 0, 1)

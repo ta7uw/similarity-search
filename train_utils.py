@@ -1,4 +1,5 @@
 import random
+import numpy as np
 
 import chainer
 from chainer import training
@@ -26,6 +27,8 @@ class PreprocessedDataset(chainer.dataset.DatasetMixin):
         crop_size = self.crop_size
         image, label = self.base[i]
         image = resize(image, crop_size)
+        image = image - self.mean[:, None, None]
+        image = image.astype(np.float32)
 
         if self.random:
             if random.randint(0, 1):
@@ -41,7 +44,7 @@ def train_run(train_data, epoch, batchsize,
     b_names, labels, _ = dataset_label(train_data)
     model = GoogleNetBN(n_class=len(b_names))
 
-    mean = compute_mean(dataset_path=train_data, insize=model.insize)
+    mean = compute_mean(dataset_path=train_data, insize=model.insize).mean(axis=(1, 2))
 
     dataset = PreprocessedDataset(train_data, mean,  model.insize)
     train, val = chainer.datasets.split_dataset_random(dataset, int(len(dataset) * 0.8))
