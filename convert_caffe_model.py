@@ -1,16 +1,24 @@
 from chainer.links.caffe import CaffeFunction
 from chainer import serializers
 from googlenetbn import GoogleNetBN
+from func.dataset_function import dataset_label
+import argparse
 
 
 def convert_caffe2chainer():
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--dataset", default="dataset")
+    args = parser.parse_args()
+
     print('start loading model file...')
     caffe_model = CaffeFunction('googlenet.caffemodel')
     print('Done.')
 
     # copy parameters from caffemodel into chainer model
     print('start copy params.')
-    googlenet = GoogleNetBN()
+    b, _, _ = dataset_label(args.dataset)
+    googlenet = GoogleNetBN(n_class=len(b))
 
     googlenet.conv1.W.data = caffe_model['conv1/7x7_s2'].W.data
     googlenet.conv2.W.data = caffe_model['conv2/3x3'].W.data
@@ -103,7 +111,12 @@ def convert_caffe2chainer():
     googlenet.inc5b.proj33.W.data = caffe_model['inception_5b/double3x3_reduce'].W.data
     googlenet.inc5b.poolp.W.data = caffe_model['inception_5b/pool_proj'].W.data
 
-    serializers.save_npz('tuned-googlenetbn.npz', googlenet)
+    googlenet.loss1_conv.W.data = caffe_model["loss1/conv"].W.data
+    googlenet.loss1_fc1.W.data = caffe_model["loss1/fc"].W.data
+    googlenet.loss2_conv.W.data = caffe_model["loss2/conv"].W.data
+    googlenet.loss2_fc1.W.data = caffe_model["loss2/fc"].W.data
+
+    serializers.save_npz('tuned_googlenetbn.npz', googlenet)
     print('Done')
 
 if __name__ == '__main__':

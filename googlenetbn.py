@@ -18,7 +18,7 @@ class GoogleNetBN(chainer.Chain):
         self.insize = 224
 
         if n_class is None:
-            self.n_class = 1000
+            self.n_class = 100
 
         if mean is None:
             # imagenet means
