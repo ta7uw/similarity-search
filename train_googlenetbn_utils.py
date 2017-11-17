@@ -45,8 +45,9 @@ def train_run(train_data, epoch, batchsize,
     model = GoogleNetBN(n_class=len(b_names))
 
     mean = compute_mean(dataset_path=train_data, insize=model.insize).mean(axis=(1, 2))
+    model.mean = mean
 
-    dataset = PreprocessedDataset(train_data, mean,  model.insize)
+    dataset = PreprocessedDataset(train_data, model.mean,  model.insize)
     train, val = chainer.datasets.split_dataset_random(dataset, int(len(dataset) * 0.8))
 
     if pre_trainedmodel:

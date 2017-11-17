@@ -1,5 +1,5 @@
 import argparse
-from train_utils import train_run
+from train_googlenetbn_utils import train_run
 
 
 def main():
