@@ -6,7 +6,11 @@ from chainer.training import extensions
 
 
 class TripletDataset(chainer.dataset.DatasetMixin):
-    def __init__(self):
+    def __init__(self, base_path, file_name, triplet_file_name, transform, laoder):
+        self.base_path = base_path
+        self.filenamelist = []
+
+
 
     def __len__(self):
         return

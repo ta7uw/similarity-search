@@ -29,4 +29,8 @@ tuned_googlenetbn.npz
 # Result
 result/
 
+# dataset
+dataset/
+triplet_dataset/
+
 

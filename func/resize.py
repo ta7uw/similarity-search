@@ -9,3 +9,4 @@ def resize(image, insize):
     image = image.resize((insize, insize), Image.BICUBIC)
 
     return np.asarray(image).transpose(2, 0, 1)
+
