@@ -28,6 +28,7 @@ def item_predict():
     image = resize(image, model.insize)
     image = image - mean[:, None, None]
     image = image.astype(np.float32)
+    image *= (1.0 / 255.0)  # Scale to [0,1]
 
     chainer.config.train = False
     y = model.predict(image)
