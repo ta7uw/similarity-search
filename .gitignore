@@ -33,4 +33,7 @@ result/
 dataset/
 triplet_dataset/
 
+# others
+__pycache__/
+.DS_Store/
 

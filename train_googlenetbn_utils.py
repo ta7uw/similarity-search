@@ -24,9 +24,8 @@ class PreprocessedDataset(chainer.dataset.DatasetMixin):
         return len(self.base)
 
     def get_example(self, i):
-        crop_size = self.crop_size
         image, label = self.base[i]
-        image = resize(image, crop_size)
+        image = resize(image, self.crop_size)
         image = image - self.mean[:, None, None]
         image *= (1.0 / 255.0)  # Scale to [0,1]
         image = image.astype(np.float32)
