@@ -29,9 +29,9 @@ def triplet_dataset_label(path):
 
     # A unique ID is given each directory name
     labels = [os.path.basename(os.path.dirname(fn)) for fn in fnames]
-    b_names = [os.path.basename(similar_name) for similar_name in similar_items]
-    labels = [b_names.index(l) for l in labels]
-    return b_names, labels, fnames
+    similar_items = [os.path.basename(similar_name) for similar_name in similar_items]
+    labels = [similar_items.index(l) for l in labels]
+    return similar_items, labels, fnames
 
 
 def transform(image_file_path, mean, crop_size, random=True):
@@ -46,4 +46,10 @@ def transform(image_file_path, mean, crop_size, random=True):
             image = image[:, :, ::-1]
 
     return image
+
+
+def create_triplet(data, target, mini_batch):
+
+    n_class = len(list(set(target)))
+    similar_item_number = len(data)
 
