@@ -5,6 +5,18 @@ import numpy as np
 import random
 from func.resize import resize
 from chainer.datasets import ImageDataset
+from PIL import Image
+
+
+def _read_image_as_array(path, dtype):
+    f = Image.open(path)
+    try:
+        image = np.asarray(f, dtype=dtype)
+    finally:
+        # Only pillow >= 3.0 has 'close' method
+        if hasattr(f, 'close'):
+            f.close()
+    return image
 
 
 def triplet_dataset_label(path):
@@ -35,7 +47,16 @@ def triplet_dataset_label(path):
 
 
 def transform(image_file_path, mean, crop_size, random=True):
-    image = ImageDataset(image_file_path)
+
+    root="."
+    full_path = os.path.join(root, image_file_path)
+    image = _read_image_as_array(full_path, dtype=np.float32)
+
+    if image.ndim == 2:
+        # image is greyscale
+        image = image[:, :, np.newaxis]
+    image = image.transpose(2, 0, 1)
+
     image = resize(image, crop_size)
     image = image - mean[:, None, None]
     image *= (1.0 / 255.0)  # Scale to [0,1]
@@ -48,8 +69,11 @@ def transform(image_file_path, mean, crop_size, random=True):
     return image
 
 
-def create_triplet(data, target, mini_batch):
+def create_triplet(similar_items, labels, fnames):
 
-    n_class = len(list(set(target)))
-    similar_item_number = len(data)
+    n_class = len(similar_items)
+    for f in fnames:
+
+    image = ImageDataset()
+
 
