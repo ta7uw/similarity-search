@@ -1,10 +1,17 @@
 import argparse
 from train_googlenetbn_utils import train_run
+from train_triplet_utils import train_triplet
 
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--train",
+
+    parser.add_argument("--model",default=0, type=int,
+                        help="Please 0 or 1."
+                             "If you select 0, train googlnet model."
+                             "If you select 1, train tripletnet")
+
+    parser.add_argument("--train", default="dataset",
                         help="Path to the root directory of the training dataset")
 
     parser.add_argument("--batch_size", type=int, default=32,
@@ -35,13 +42,24 @@ def main():
     args = parser.parse_args()
 
     print("Training strats")
-    train_run(
-        train_data=args.train,
-        epoch=args.epoch,  batchsize=args.batch_size,
-        gpu=args.gpu, out=args.out, val_iteration=args.val_iteration,
-        log_iteration=args.log_iteration, loaderjob=args.loaderjob,
-        resume=args.resume, pre_trainedmodel=True
-    )
+    if args.model == 0:
+        train_run(
+            train_data=args.train,
+            epoch=args.epoch,  batchsize=args.batch_size,
+            gpu=args.gpu, out=args.out, val_iteration=args.val_iteration,
+            log_iteration=args.log_iteration, loaderjob=args.loaderjob,
+            resume=args.resume, pre_trainedmodel=True
+        )
+
+    elif args.model == 1:
+        train_triplet(
+            train_data=args.train,
+            epoch=args.epoch, batchsize=args.batch_size,
+            gpu=args.gpu, out=args.out, val_iteration=args.val_iteration,
+            log_iteration=args.log_iteration, loaderjob=args.loaderjob,
+            resume=args.resume, pre_trainedmodel=True
+        )
+
 
 if __name__ == '__main__':
     main()
