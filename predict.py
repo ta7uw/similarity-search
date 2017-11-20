@@ -1,11 +1,13 @@
-import chainer
 import argparse
-from func.dataset_function import dataset_label
-from func.resize import resize
-from func.compute_mean import compute_mean
-from googlenetbn import GoogleNetBN
+
+import chainer
 import numpy as np
 from PIL import Image
+
+from func.compute_mean import compute_mean
+from func.dataset_function import dataset_label
+from func.resize import resize
+from model.googlenetbn import GoogleNetBN
 
 
 def item_predict():

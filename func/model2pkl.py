@@ -1,8 +1,10 @@
-from googlenetbn import GoogleNetBN
-from .dataset_function import dataset_label
-import chainer
-import pickle
 import argparse
+import pickle
+
+import chainer
+
+from model.googlenetbn import GoogleNetBN
+from .dataset_function import dataset_label
 
 
 def model2pkl():

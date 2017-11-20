@@ -1,14 +1,14 @@
 import random
-import numpy as np
 
 import chainer
+import numpy as np
 from chainer import training
 from chainer.training import extensions
 
-from googlenetbn import GoogleNetBN
-from func.dataset_function import dataset_label
 from func.compute_mean import compute_mean
+from func.dataset_function import dataset_label
 from func.resize import resize
+from model.googlenetbn import GoogleNetBN
 
 
 class PreprocessedDataset(chainer.dataset.DatasetMixin):

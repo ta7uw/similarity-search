@@ -1,8 +1,10 @@
-from chainer.links.caffe import CaffeFunction
-from chainer import serializers
-from googlenetbn import GoogleNetBN
-from func.dataset_function import dataset_label
 import argparse
+
+from chainer import serializers
+from chainer.links.caffe import CaffeFunction
+
+from func.dataset_function import dataset_label
+from model.googlenetbn import GoogleNetBN
 
 
 def convert_caffe2chainer():

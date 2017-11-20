@@ -1,10 +1,11 @@
 import chainer
-from multi_scale_net import MultiscaleNet
 from chainer import training
 from chainer.training import extensions
-from func.triplet_dataset_function import triplet_dataset_label, transform, create_triplet
+
 from func.compute_mean import compute_mean
-from triplet_net import TripletNet
+from func.triplet_dataset_function import triplet_dataset_label, transform, create_triplet
+from model.multi_scale_net import MultiscaleNet
+from model.triplet_net import TripletNet
 
 
 class TripletDataset(chainer.dataset.DatasetMixin):
