@@ -104,8 +104,8 @@ def train_run(train_data, epoch, batchsize,
          "validation/main/accuracy"],
         x_key="epoch", file_name="accuracy.png"))
     trainer.extend(extensions.snapshot(), trigger=val_interval)
-    trainer.extend(extensions.snapshot_object(model, "model_iter_{.updater.iteration}"),
-                   trigger=val_interval)
+    trainer.extend(extensions.snapshot_object(model, "model_epoch_{.updater.epoch}"),
+                   trigger=(epoch, "epoch"))
     trainer.extend(extensions.ProgressBar(update_interval=10))
 
     if resume:
