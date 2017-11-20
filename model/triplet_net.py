@@ -30,3 +30,6 @@ class TripletNet(chainer.Chain):
 
         return self.loss
 
+    def project(self, x):
+        return self.model(x)
+
