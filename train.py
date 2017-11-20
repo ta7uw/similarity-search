@@ -52,12 +52,14 @@ def main():
         )
 
     elif args.model == 1:
+        # Set trained model param for GoogleNet BatchNormalization version
+        googlenetbn_trainedmodel = "model_epoch_20"
         train_triplet(
             train_data=args.train,
             epoch=args.epoch, batchsize=args.batch_size,
             gpu=args.gpu, out=args.out, val_iteration=args.val_iteration,
             log_iteration=args.log_iteration, loaderjob=args.loaderjob,
-            resume=args.resume, pre_trainedmodel=True
+            resume=args.resume, pre_trainedmodel=True, googlenetbn_trainedmodel=googlenetbn_trainedmodel
         )
 
 
