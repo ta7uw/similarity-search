@@ -18,6 +18,7 @@ def _read_image_as_array(path, dtype):
     return image
 
 
+
 def triplet_dataset_label(path):
     """
         :param path: Path to the image dataset
@@ -28,11 +29,11 @@ def triplet_dataset_label(path):
     # Path to the image dataset
     IMG_DIR = path
 
-    # Directory name of each item
+    # Directory name of each category
     category_names = glob.glob("{}/*".format(IMG_DIR))
 
     # Directory name of each item
-    similar_items = glob.glob("{}/*".format(category_names))
+    similar_items = glob.glob("{}/*".format(category_name) for category_name in category_names)
 
     # List of path to image files
     fnames = [glob.glob("{}/*.jpg".format(similar_name)) for similar_name in similar_items]
@@ -40,9 +41,9 @@ def triplet_dataset_label(path):
 
     # A unique ID is given each directory name
     labels = [os.path.basename(os.path.dirname(fn)) for fn in fnames]
-    similar_items = [os.path.basename(similar_name) for similar_name in similar_items]
+    similar_items = [os.path.basename(similar_item) for similar_item in similar_items]
     labels = [similar_items.index(l) for l in labels]
-    return similar_items, labels, fnames
+    return category_names, similar_items, labels, fnames
 
 
 def transform(image_file_path, mean, crop_size, random=True):
@@ -68,26 +69,30 @@ def transform(image_file_path, mean, crop_size, random=True):
     return image
 
 
-def create_triplet(similar_items, labels, fnames):
+def create_triplet(dataset):
 
+    category_names, similar_items, labels, fnames = dataset
     triplets = []
-    n_class = len(similar_items)
-    minibatch_size = n_class - 1
+    triplet_batch = 10
 
-    sum_data = [len(np.where(labels == i)[0]) for i in range(n_class)]
-    indexes = np.random.permutation(len(labels))[:numboer_combination]
+    for fname, label in zip(fnames, labels):
 
+        anchor = fname
+        anchor_label = label
 
+        # Choose positive from same directory
+        positive_list = np.where(labels == anchor_label)[0]
+        positive_list = np.random.permutation(len(positive_list))[:triplet_batch]
+        positive_list = list(fnames[i] for i in positive_list)
 
+        # Choose negative image one by one from similar items other than itself.
+        negative_list = np.where(labels != anchor_label)[0]
+        negative_list = np.random.permutation(len(negative_list))[:triplet_batch]
+        negative_list = list(fnames[i] for i in negative_list)
 
-    for fname in fnames:
-        anchor = fnames
-        positive =
-        negative =
-
-        triplet = anchor, positive, negative
-        triplets.append(triplet)
-
+        for positive, negative in zip(positive_list, negative_list):
+            triplet = anchor, positive, negative
+            triplets.append(triplet)
 
     return triplets
 
