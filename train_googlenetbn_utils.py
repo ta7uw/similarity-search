@@ -106,7 +106,7 @@ def train_run(train_data, epoch, batchsize,
     trainer.extend(extensions.snapshot(), trigger=val_interval)
     trainer.extend(extensions.snapshot_object(model, "model_epoch_{.updater.epoch}"),
                    trigger=(epoch, "epoch"))
-    trainer.extend(extensions.ProgressBar(update_interval=10))
+    trainer.extend(extensions.dump_graph("main/loss"))
 
     if resume:
         chainer.serializers.load_npz(resume, trainer)

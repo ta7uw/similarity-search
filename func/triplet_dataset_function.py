@@ -4,7 +4,6 @@ from itertools import chain
 import numpy as np
 import random
 from func.resize import resize
-from chainer.datasets import ImageDataset
 from PIL import Image
 
 
@@ -71,9 +70,25 @@ def transform(image_file_path, mean, crop_size, random=True):
 
 def create_triplet(similar_items, labels, fnames):
 
+    triplets = []
     n_class = len(similar_items)
-    for f in fnames:
+    minibatch_size = n_class - 1
 
-    image = ImageDataset()
+    sum_data = [len(np.where(labels == i)[0]) for i in range(n_class)]
+    indexes = np.random.permutation(len(labels))[:numboer_combination]
+
+
+
+
+    for fname in fnames:
+        anchor = fnames
+        positive =
+        negative =
+
+        triplet = anchor, positive, negative
+        triplets.append(triplet)
+
+
+    return triplets
 
 

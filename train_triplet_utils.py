@@ -20,10 +20,10 @@ class TripletDataset(chainer.dataset.DatasetMixin):
         return len(self.triplets)
 
     def get_example(self, i):
-        path1, path2, path3 = self.triplets[i]
-        anchor = transform(path1, self.mean, self.crop_size)
-        positive = transform(path1, self.mean, self.crop_size)
-        negative = transform(path1, self.mean, self.crop_size)
+        a_path, p_path, n_path = self.triplets[i]
+        anchor = transform(a_path, self.mean, self.crop_size)
+        positive = transform(p_path, self.mean, self.crop_size)
+        negative = transform(n_path, self.mean, self.crop_size)
         return anchor, positive, negative
 
 
@@ -39,7 +39,6 @@ def train_triplet(train_data, epoch, batchsize,
 
     mean = compute_mean(dataset_path=train_data, insize=multinet.insize).mean(axis=(1, 2))
     multinet.mean = mean
-
 
     # Wrapping 'MultiscaleNet' model in 'TripletNet' model
     tripletnet = TripletNet(multinet)
@@ -101,6 +100,7 @@ def train_triplet(train_data, epoch, batchsize,
     trainer.extend(extensions.snapshot_object(tripletnet, "model_epoch_{.updater.epoch}"),
                    trigger=(epoch, "epoch"))
     trainer.extend(extensions.ProgressBar(update_interval=10))
+    trainer.extend(extensions.dump_graph("main/loss"))
 
     if resume:
         chainer.serializers.load_npz(resume, trainer)

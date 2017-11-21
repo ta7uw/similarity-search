@@ -6,7 +6,7 @@ from train_triplet_utils import train_triplet
 def main():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("--model",default=0, type=int,
+    parser.add_argument("--model", default=0, type=int,
                         help="Please 0 or 1."
                              "If you select 0, train googlnet model."
                              "If you select 1, train tripletnet")
