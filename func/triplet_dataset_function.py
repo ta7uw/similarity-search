@@ -8,6 +8,12 @@ from PIL import Image
 
 
 def _read_image_as_array(path, dtype):
+    """
+    Read image file and Return image as array
+    :param path: image file path
+    :param dtype: argument of array transformed from image.
+    :return: image as array
+    """
     f = Image.open(path)
     try:
         image = np.asarray(f, dtype=dtype)
@@ -18,14 +24,14 @@ def _read_image_as_array(path, dtype):
     return image
 
 
-
 def triplet_dataset_label(path):
     """
-        :param path: Path to the image dataset
-        :return: b_names: Directory name of each item
-                 labels: A unique ID is given each directory name
-                 fnames: List of path to image files
-        """
+    :param path: Path to the image dataset
+    :return: category_names: Directory name of category
+             b_names: Directory name of each item
+             labels: A unique ID is given each directory name
+             fnames: List of path to image files
+    """
     # Path to the image dataset
     IMG_DIR = path
 
@@ -47,8 +53,16 @@ def triplet_dataset_label(path):
 
 
 def transform(image_file_path, mean, crop_size, random=True):
+    """
+    Transform image file for training
+    :param image_file_path: Path to image file
+    :param mean: Mean image of the dataset images
+    :param crop_size: The insize of model
+    :param random: Random Transform
+    :return: transformed image for training
+    """
 
-    root="."
+    root = "."
     full_path = os.path.join(root, image_file_path)
     image = _read_image_as_array(full_path, dtype=np.float32)
 
@@ -70,26 +84,42 @@ def transform(image_file_path, mean, crop_size, random=True):
 
 
 def create_triplet(dataset):
+    """
 
+    :param dataset: dataset made from 'triplet_dataset_label' function
+    :return: dataset of triplets that contains anchor, positive, negative
+    """
+    # dataset made from triplet_dataset_label' function
     category_names, similar_items, labels, fnames = dataset
+
+    # Create a list for triplet
     triplets = []
+
+    # This is a number that shows how many triplets are creates for each anchor
     triplet_batch = 10
 
+    # Create triplet for each image file
     for fname, label in zip(fnames, labels):
 
+        # Set image file as a anchor
         anchor = fname
         anchor_label = label
 
-        # Choose positive from same directory
+        # Choose positive image labels from same directory
         positive_list = np.where(labels == anchor_label)[0]
+        # Change the positive_list order randomly the size of triplet_batch
         positive_list = np.random.permutation(len(positive_list))[:triplet_batch]
+        # By using the number of positive image lable, Get path to the positive image file and create a list
         positive_list = list(fnames[i] for i in positive_list)
 
         # Choose negative image one by one from similar items other than itself.
         negative_list = np.where(labels != anchor_label)[0]
+        # Change the positive_list order randomly the size of triplet_batch
         negative_list = np.random.permutation(len(negative_list))[:triplet_batch]
+        # By using the number of negative image lable, Get path to the positive image file and create a list
         negative_list = list(fnames[i] for i in negative_list)
 
+        # Create tiplet from anchorm positive, negative and append it to the tripets list
         for positive, negative in zip(positive_list, negative_list):
             triplet = anchor, positive, negative
             triplets.append(triplet)
