@@ -10,11 +10,10 @@ from model.triplet_net import TripletNet
 
 class TripletDataset(chainer.dataset.DatasetMixin):
     def __init__(self, base_path, crop_size, mean):
-
-        similar_items, labels, fnames = triplet_dataset_label(base_path)
+        dataset = triplet_dataset_label(base_path)
         self.crop_size = crop_size
         self.mean = mean
-        self.triplets = create_triplet(similar_items, labels, fnames)
+        self.triplets = create_triplet(*dataset)
 
     def __len__(self):
         return len(self.triplets)
@@ -31,8 +30,8 @@ def train_triplet(train_data, epoch, batchsize,
                   gpu, out, val_iteration, log_iteration, loaderjob,
                   resume, pre_trainedmodel=True, googlenetbn_trainedmodel=None):
 
-    similar_items, _, _ = triplet_dataset_label(train_data)
-    multinet = MultiscaleNet(n_class=len(similar_items), pretrained_model=pre_trainedmodel)
+    dataset = triplet_dataset_label(train_data)
+    multinet = MultiscaleNet(n_class=len(dataset[1]), pretrained_model=pre_trainedmodel)
 
     if googlenetbn_trainedmodel is not None:
         chainer.serializers.load_npz(multinet.googlenetbn, googlenetbn_trainedmodel)
