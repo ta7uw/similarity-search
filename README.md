@@ -12,11 +12,11 @@ It requires Chainer 3.1.0 or later.
 
 ## Usage
 
-###・Training  
+・Training  
 
-###・Mapping  
+・Mapping  
 
-###・Searching  
+・Searching  
 
 ## Licence
 MIT License(see LICENSE file for more information or see https://opensource.org/licenses/MIT.).
