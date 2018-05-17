@@ -47,8 +47,9 @@ def train_triplet(train_data, epoch, batchsize,
     train, val = chainer.datasets.split_dataset_random(dataset, int(len(dataset) * 0.8))
 
     if gpu >= 0:
-        chainer.cuda.get_device_from_id(gpu)
-        tripletnet.to_gpu()
+        # Make a specified GPU current
+        chainer.backends.cuda.get_device_from_id(gpu).use()
+        tripletnet.to_gpu()  # Copy the model to the GPU
 
     if loaderjob <= 0:
         train_iter = chainer.iterators.SerialIterator(train, batchsize)
